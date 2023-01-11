@@ -28,7 +28,8 @@ public class User1Controller {
 	public String modify(Model model, String uid) {
 		User1VO user = service.selectUser1(uid);
 		model.addAttribute("user", user);
-		return "/user/modify";
+		
+		return "/user1/modify";
 	}
 	
 	@PostMapping("/user1/modify")
@@ -45,6 +46,12 @@ public class User1Controller {
 	@PostMapping("/user1/register")
 	public String register(User1VO vo) {
 		service.insertUser1(vo);
+		return "redirect:/user1/list";
+	}
+	
+	@GetMapping("/user1/delete")
+	public String delete(String uid) {
+		service.deleteUser1(uid);
 		return "redirect:/user1/list";
 	}
 }
