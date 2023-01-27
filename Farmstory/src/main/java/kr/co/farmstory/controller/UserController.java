@@ -20,4 +20,5 @@ public class UserController {
     public String terms() {
         return "user/terms";
     }
+
 }
