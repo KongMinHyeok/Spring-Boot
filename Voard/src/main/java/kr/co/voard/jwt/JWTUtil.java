@@ -45,7 +45,7 @@ public class JWTUtil {
 	}
 	
 	// JWT 유효성 검사
-	public boolean vaildateToken(String token) {
+	public boolean validateToken(String token) {
 		Date expiration = getClaimFromToken(token, Claims::getExpiration);
 		return !expiration.before(new Date());
 	}

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.co.voard.jwt.JWTUtil;
+import kr.co.voard.repository.UserEntity;
 import kr.co.voard.security.MyUserDetails;
 import kr.co.voard.security.SecurityUserService;
 import kr.co.voard.vo.UserVO;
@@ -38,9 +40,7 @@ public class UserController {
 	@ResponseBody
 	@PostMapping("/user/login")
 	public Map<String, Object> login(@RequestBody UserVO vo) {
-	
-		log.info("vo : " + vo );
-		
+		log.info("vo : " + vo);
 		// 사용자 정보 객체생성
 		String uid = vo.getUid();
 		String pass = vo.getPass();
@@ -57,14 +57,36 @@ public class UserController {
 		log.info("login...3 : " + token);
 		
 		// 데이터 출력
+		UserEntity user = myUserDetails.getUser();
+		
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("accessToken", token);
+		resultMap.put("user", user);
 		
-		return resultMap;
+		return resultMap;		
+	}
+	
+	@ResponseBody
+	@GetMapping("/user/auth")
+	public Map<String, Object> auth(Authentication authentication) {
+		
+		log.info("auth...1");
+		
+		// Security 사용자 인증 객체
+		MyUserDetails myUserDetails = (MyUserDetails) authentication.getPrincipal();
+		UserEntity user = myUserDetails.getUser();
+		
+		log.info("auth...3 : " + user);
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		resultMap.put("user", user);
+		
+		return resultMap;	
 	}
 	
 	@GetMapping("/user/logout")
 	public void logout() {
 		
 	}
+	
 }
