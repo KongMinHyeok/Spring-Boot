@@ -10,10 +10,11 @@ import kr.co.voard.vo.UserVO;
 @Repository
 public interface UserDAO {
 
-	public TermsVO selectTerms();
 	public int insertUser(UserVO vo);
+	public TermsVO selectTerms();
 	public void selectUser();
 	public void selectUsers();
 	public void updateUser();
 	public void deleteUser();
+	
 }

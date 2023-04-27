@@ -7,7 +7,7 @@
 	<select id="selectTerms" resultType="kr.co.voard.vo.TermsVO">
 		select * from `board_terms`;
 	</select>
-
+	
 	<insert id="insertUser">
 		insert into `board_user` set
 			`uid`=#{uid}, 
@@ -22,5 +22,4 @@
 			`regip`=#{regip},
 			`rdate`=NOW(); 
 	</insert>
-
 </mapper>

@@ -43,17 +43,22 @@ public class UserController {
 	@Autowired
 	private UserService service;
 	
+	
 	@GetMapping("/user/terms")
-	public TermsVO terms() {
+	public TermsVO terms() {		
 		return service.selectTerms();
 	}
 	
-	@GetMapping("/user/countUid")
-	public void CountUid() {
-		return service.countUid();
+	@PostMapping("/user/register")
+	public void register(@RequestBody UserVO vo) {
+		service.insertUser(vo);
 	}
 	
-	@ResponseBody
+	@GetMapping("/user/countUid")
+	public int countUid(String uid) {
+		return service.countUid(uid);
+	}
+	
 	@PostMapping("/user/login")
 	public Map<String, Object> login(@RequestBody UserVO vo) {
 		log.info("vo : " + vo);
@@ -82,13 +87,12 @@ public class UserController {
 		return resultMap;		
 	}
 	
-	@ResponseBody
 	@GetMapping("/user/auth")
 	public Map<String, Object> auth(Authentication authentication) {
 		
 		log.info("auth...1");
 		
-		// Security 사용자 인증 객체
+		// Security 사용자 인증 객체 
 		MyUserDetails myUserDetails = (MyUserDetails) authentication.getPrincipal();
 		UserEntity user = myUserDetails.getUser();
 		

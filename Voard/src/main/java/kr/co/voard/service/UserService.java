@@ -17,35 +17,27 @@ public class UserService {
 	private UserDAO dao;
 	
 	@Autowired
-	private UserRepo repo;
-	
-	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
+	@Autowired
+	private UserRepo repo;
 	
 	public TermsVO selectTerms() {
-		
-		return dao.selectTerms(); 
+		return dao.selectTerms();
 	}
 	
-	
 	public int insertUser(UserVO vo) {
-		
 		vo.setPass(passwordEncoder.encode(vo.getPass2()));
 		
 		int result = dao.insertUser(vo);
 		
 		return result;
-		
 	}
 	
-	public int countUser(String uid) {
+	public int countUid(String uid) {
 		return repo.countByUid(uid);
 	}
 	
-	public void selectUser() {}
-	public void selectUsers() {}
-	public void updateUser() {}
-	public void deleteUser() {}
+	
 	
 }

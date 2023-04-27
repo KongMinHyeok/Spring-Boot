@@ -36,13 +36,14 @@ public class ArticleService {
 		
 		// 글 등록
 		int result = dao.insertArticle(vo);
+		/*
 		// 파일 업로드
 		FileVO fvo = fileUpload(vo);
 		// 파일 등록
 		if(fvo != null) {
 			dao.insertFile(fvo);
 		}
-		
+		*/
 		return result;	
 	}
 	
@@ -53,17 +54,14 @@ public class ArticleService {
 	public ArticleVO selectArticle(int no) {
 		return dao.selectArticle(no);
 	}
-	
+	public List<ArticleVO> selectArticles(int start) {
+		return dao.selectArticles(start);
+	}
 	public FileVO selectFile(int fno) {
 		return dao.selectFile(fno);
 	}
-	
 	public int updateFileDownload(int fno) {
 		return dao.updateFileDownload(fno);
-	}
-	
-	public List<ArticleVO> selectArticles(int start) {
-		return dao.selectArticles(start);
 	}
 	public int updateArticle(ArticleVO vo) {
 		return dao.updateArticle(vo);
@@ -78,8 +76,7 @@ public class ArticleService {
 	
 	public ResponseEntity<Resource> fileDownload(FileVO vo) throws IOException {
 		
-		// String path = new File(uploadPath).getAbsolutePath()+"/"+vo.getNewName();
-		Path path = Paths.get(uploadPath+"/"+vo.getNewName()); 
+		Path path = Paths.get(uploadPath+vo.getNewName()); 
 		log.info("path : "+path);
 		
 		String contentType = Files.probeContentType(path);
@@ -90,13 +87,13 @@ public class ArticleService {
 										.builder("attachment")
 										.filename(vo.getOriName(), StandardCharsets.UTF_8)
 										.build());
+		
 		headers.add(HttpHeaders.CONTENT_TYPE, contentType);
 		
 		Resource resource = new InputStreamResource(Files.newInputStream(path));
 		
 		return new ResponseEntity<>(resource, headers, HttpStatus.OK);
 	}
-	
 	
 	public FileVO fileUpload(ArticleVO vo) {
 		// 첨부 파일
@@ -131,6 +128,7 @@ public class ArticleService {
 		return fvo;
 	}
 	
+	
 	// 현재 페이지 번호
 	public int getCurrentPage(String pg) {
 		int currentPage = 1;
@@ -140,10 +138,9 @@ public class ArticleService {
 		}
 		
 		return currentPage;
-		
 	}
-	// 페이지 시작값
 	
+	// 페이지 시작값
 	public int getLimitStart(int currentPage) {
 		return (currentPage - 1) * 10;
 	}
@@ -154,7 +151,7 @@ public class ArticleService {
 		int lastPageNum = 0;
 		
 		if(total % 10 == 0) {
-			lastPageNum = total / 10;
+			lastPageNum = total / 10;			
 		}else {
 			lastPageNum = total / 10 + 1;
 		}
@@ -173,7 +170,7 @@ public class ArticleService {
 		int groupStart = (groupCurrent - 1) * 10 + 1;
 		int groupEnd = groupCurrent * 10;
 		
-		if (groupEnd > lastPageNum) {
+		if(groupEnd > lastPageNum) {
 			groupEnd = lastPageNum;
 		}
 		
@@ -181,4 +178,9 @@ public class ArticleService {
 		
 		return groups;
 	}
+	
 }
+
+
+
+
